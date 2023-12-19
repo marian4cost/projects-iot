@@ -1,8 +1,8 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 
-const char *ssid = "RCT";
-const char *password = "98197313";
+const char *ssid = "";
+const char *password = "";
 
 const int triggerPin = 5;
 const int echoPin = 4;
