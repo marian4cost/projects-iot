@@ -1,8 +1,8 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 
-const char *ssid = "17282";
-const char *password = "123456789";
+const char *ssid = "RCT";
+const char *password = "98197313";
 
 const int triggerPin = 5;
 const int echoPin = 4;
@@ -11,9 +11,12 @@ ESP8266WebServer server(80);
 
 void setup() {
   Serial.begin(115200);
+  pinMode(triggerPin, OUTPUT); // Configurar triggerPin como saída
+  pinMode(echoPin, INPUT);    // Configurar echoPin como entrada
   conectarWiFi();
   configurarServidor();
 }
+
 
 void loop() {
   server.handleClient();
