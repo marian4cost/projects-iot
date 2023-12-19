@@ -11,8 +11,9 @@ ESP8266WebServer server(80);
 
 void setup() {
   Serial.begin(115200);
-  pinMode(triggerPin, OUTPUT); // Configurar triggerPin como saída
-  pinMode(echoPin, INPUT);    // Configurar echoPin como entrada
+  pinMode(triggerPin, OUTPUT); 
+  pinMode(echoPin, INPUT);    
+  
   conectarWiFi();
   configurarServidor();
 }
@@ -21,22 +22,21 @@ void setup() {
 void loop() {
   server.handleClient();
 
-  // Medir a distância e exibir no Monitor Serial
   float distancia_cm = sonarPing();
-  Serial.print("Distância: ");
+  Serial.print("volume: ");
   Serial.print(distancia_cm);
   Serial.println(" cm");
 
-  delay(1000); // Aguarde 1 segundo entre as leituras para evitar uma saída muito rápida no Monitor Serial
+  delay(1000); 
 }
 
 void conectarWiFi() {
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(1000);
-    Serial.println("Conectando ao WiFi...");
+    Serial.println("conectando");
   }
-  Serial.println("Conectado ao WiFi");
+  Serial.println("conectado");
 }
 
 float sonarPing() {
@@ -50,12 +50,12 @@ float sonarPing() {
 
 void configurarServidor() {
   server.on("/", HTTP_GET, []() {
-    Serial.print("Endereço IP: ");
+    Serial.print("endereço ip: ");
     Serial.println(WiFi.localIP());
 
     float distancia_cm = sonarPing();
 
-    String mensagem = "Distância: " + String(distancia_cm) + " cm";
+    String mensagem = "volume: " + String(distancia_cm) + " cm";
 
     String html = "<html><body>";
     html += "<p>" + mensagem + "</p>";
@@ -65,5 +65,5 @@ void configurarServidor() {
   });
 
   server.begin();
-  Serial.println("Servidor iniciado");
+  Serial.println("localhost startada");
 }
