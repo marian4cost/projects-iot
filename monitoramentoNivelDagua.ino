@@ -2,17 +2,14 @@
 #include <ESP8266WebServer.h>
 #include <NewPing.h>
 
-const char *ssid = "SuaRedeWiFi";
-const char *password = "SuaSenhaWiFi";
+const char *ssid = "17282";
+const char *password = "123456789";
 
-const int triggerPin = ;
-const int echoPin = ;
-
-const int maxDistance = 200;
-
-NewPing sonar(triggerPin, echoPin, maxDistance);
+const int triggerPin = 5;
+const int echoPin = 4;
 
 ESP8266WebServer server(80);
+NewPing sonar(triggerPin, echoPin);
 
 void setup() {
   Serial.begin(115200);
@@ -22,6 +19,14 @@ void setup() {
 
 void loop() {
   server.handleClient();
+
+  // Medir a distância e exibir no Monitor Serial
+  float distancia_cm = sonar.ping_cm();
+  Serial.print("Distância: ");
+  Serial.print(distancia_cm);
+  Serial.println(" cm");
+
+  delay(1000); // Aguarde 1 segundo entre as leituras para evitar uma saída muito rápida no Monitor Serial
 }
 
 void conectarWiFi() {
@@ -33,28 +38,17 @@ void conectarWiFi() {
   Serial.println("Conectado ao WiFi");
 }
 
-float medirVolumeAgua() {
-  delay(50);
-  return sonar.ping_cm();
-}
-
 void configurarServidor() {
-  // Manipuladores de rota
   server.on("/", HTTP_GET, []() {
     Serial.print("Endereço IP: ");
     Serial.println(WiFi.localIP());
 
-    float distance_cm = medirVolumeAgua();
+    float distancia_cm = sonar.ping_cm();
 
-    String mensagem;
-    if (distance_cm > 20) {
-      mensagem = "Nível alto";
-    } else {
-      mensagem = "Tudo sob controle";
-    }
+    String mensagem = "Distância: " + String(distancia_cm) + " cm";
 
     String html = "<html><body>";
-    html += "<p>" + mensagem + ": " + String(distance_cm) + " cm</p>";
+    html += "<p>" + mensagem + "</p>";
     html += "</body></html>";
 
     server.send(200, "text/html", html);
